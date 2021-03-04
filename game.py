@@ -1,9 +1,6 @@
-from enum import Enum
-
-class Player(Enum):
-    EMPTY = 0
-    ONE = 1
-    TWO = 2
+from player_type import Player
+import zlib
+import random
 
 win_combinations = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
 
@@ -16,8 +13,10 @@ class TicTacToe:
 
     def reset(self):
         self.board_state = [Player.EMPTY]*9
-        self.player = Player.ONE
+        self.player = Player.ONE if random.randint(0,2) == 1 else Player.TWO
 
+    def get_hash(self):
+        return zlib.adler32(bytes(''.join(str(p) for p in self.board_state), 'utf-8'))
 
     def input(self, field: int):
         if self.is_board_full():
